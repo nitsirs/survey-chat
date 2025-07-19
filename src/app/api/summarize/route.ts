@@ -62,7 +62,7 @@ ${conversationText}
       messages: [
         { role: 'user', content: prompt }
       ],
-      max_tokens: 150,
+      max_tokens: 500,
       temperature: 0.3,
     });
 

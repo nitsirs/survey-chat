@@ -13,6 +13,12 @@ export async function POST(request: NextRequest) {
     exchangeCount = reqExchangeCount;
 
     // Check if OpenAI API key is available
+    console.log('OpenAI API Key check:', {
+      hasKey: !!process.env.OPENAI_API_KEY,
+      keyPreview: process.env.OPENAI_API_KEY?.substring(0, 10) + '...',
+      isPlaceholder: process.env.OPENAI_API_KEY?.includes('your_openai_api_key_here')
+    });
+    
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes('your_openai_api_key_here')) {
       // Fallback responses when OpenAI is not configured
       const fallbackResponses = [
@@ -49,12 +55,18 @@ export async function POST(request: NextRequest) {
       ...messages.slice(-5) // Keep last 5 messages for context
     ];
 
+    console.log('Sending to OpenAI:', JSON.stringify(chatMessages, null, 2));
+    console.log('Survey data:', surveyData);
+    console.log('Exchange count:', exchangeCount);
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: chatMessages as any,
-      max_tokens: 200,
+      max_tokens: 500,
       temperature: 0.7,
     });
+
+    console.log('OpenAI response:', completion.choices[0]?.message?.content);
 
     const assistantMessage = completion.choices[0]?.message?.content || 'เข้าใจ คุณสามารถอธิบายเพิ่มเติมได้ไหม?';
     const isComplete = assistantMessage.includes('[COMPLETE]') || exchangeCount >= 3;
@@ -69,6 +81,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error in chat API:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
     
     // Fallback response on any error
     const fallbackMessage = exchangeCount >= 3 
