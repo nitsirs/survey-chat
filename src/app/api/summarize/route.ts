@@ -8,9 +8,11 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     const { conversation, concerns } = await request.json();
+    console.log('Summarize API received:', { conversation, concerns });
 
     // Handle both old format (concerns) and new format (conversation)
     const isOldFormat = concerns && !conversation;
+    console.log('Using old format:', isOldFormat);
     
     // Check if OpenAI API key is available
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.includes('your_openai_api_key_here')) {
@@ -53,6 +55,8 @@ ${conversationText}
 สรุปเฉพาะประเด็นความกังวลหลักและเหตุผลที่สำคัญ ใช้ภาษาไทยระดับมืออาชีพ`;
     }
 
+    console.log('Prompt being sent to OpenAI:', prompt);
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
@@ -63,6 +67,7 @@ ${conversationText}
     });
 
     const summary = completion.choices[0]?.message?.content || 'ผู้ใช้แสดงความกังวลเกี่ยวกับการเปลี่ยนจาก Line ไป Slack';
+    console.log('OpenAI response:', summary);
 
     return NextResponse.json({
       summary: summary.trim()

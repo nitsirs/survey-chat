@@ -85,6 +85,7 @@ export default function ChatBot({ surveyData, onComplete }: ChatBotProps) {
 
       // Try to generate AI summary with full conversation context
       try {
+        console.log('Sending conversation to summarize API:', conversationMessages);
         const response = await fetch('/api/summarize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -93,10 +94,13 @@ export default function ChatBot({ surveyData, onComplete }: ChatBotProps) {
         
         if (response.ok) {
           const data = await response.json();
+          console.log('Received summary:', data.summary);
           return data.summary;
+        } else {
+          console.log('API response not ok:', response.status);
         }
       } catch (error) {
-        console.log('AI summary failed, using fallback');
+        console.log('AI summary failed, using fallback:', error);
       }
 
       // Fallback: Create manual summary from user messages only
