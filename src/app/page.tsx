@@ -67,15 +67,15 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="max-w-lg mx-auto px-6 py-12">
+      <div className="max-w-2xl mx-auto px-6 py-8 md:py-12">
         
         {currentStep === 'survey' && (
-          <div className="space-y-12">
-            <div className="text-center space-y-3">
-              <h1 className="text-2xl font-light text-gray-900">
+          <div className="space-y-16">
+            <div className="text-center space-y-6">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
                 การเปลี่ยนไปใช้ Slack
               </h1>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-600 text-xl md:text-2xl font-semibold">
                 ความคิดเห็นของคุณมีความสำคัญ
               </p>
             </div>
@@ -92,19 +92,19 @@ export default function Home() {
               onChange={(value) => setSurveyData(prev => ({ ...prev, teamRating: value }))}
             />
 
-            <div className="space-y-4">
-              <h3 className="text-lg font-light text-gray-900 text-center">
+            <div className="space-y-6">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
                 ข้อกังวลหรือคำถาม
               </h3>
               <div
                 onClick={handleConcernsClick}
-                className={`w-full p-6 border rounded-3xl transition-all duration-300 ${
+                className={`w-full p-8 md:p-10 border-2 rounded-3xl transition-all duration-300 ${
                   canProceedToChat 
-                    ? 'border-orange-200 bg-orange-50 cursor-pointer hover:border-orange-300 hover:bg-orange-100' 
-                    : 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                    ? 'border-orange-300 bg-orange-50 cursor-pointer hover:border-orange-400 hover:bg-orange-100' 
+                    : 'border-gray-300 bg-gray-50 cursor-not-allowed'
                 }`}
               >
-                <p className={`text-center text-sm ${
+                <p className={`text-center text-xl md:text-2xl font-bold ${
                   canProceedToChat ? 'text-orange-600' : 'text-gray-400'
                 }`}>
                   {canProceedToChat 
@@ -115,22 +115,22 @@ export default function Home() {
             </div>
 
             {surveyData.chatHistory && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-light text-gray-900 text-center">
+              <div className="space-y-6">
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
                   สรุปความกังวล
                 </h3>
-                <div className="w-full p-6 border border-gray-200 rounded-3xl bg-gray-50">
+                <div className="w-full p-8 md:p-10 border-2 border-gray-300 rounded-3xl bg-gray-50">
                   {surveyData.isGeneratingSummary ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="flex space-x-2">
+                        <div className="w-4 h-4 bg-orange-400 rounded-full animate-bounce"></div>
+                        <div className="w-4 h-4 bg-orange-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-4 h-4 bg-orange-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                       </div>
-                      <p className="text-sm text-gray-500">กำลังสรุปให้...</p>
+                      <p className="text-lg md:text-xl font-semibold text-gray-600">กำลังสรุปให้...</p>
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-700 leading-relaxed">
+                    <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
                       {surveyData.chatSummary || "ยังไม่มีสรุป"}
                     </p>
                   )}
@@ -139,10 +139,10 @@ export default function Home() {
             )}
             
             {showSubmit && (
-              <div className="text-center mt-8">
+              <div className="text-center mt-12">
                 <button
                   onClick={submitToGoogleForms}
-                  className="px-12 py-4 bg-orange-400 text-white rounded-full font-light hover:bg-orange-500 transition-colors"
+                  className="px-16 py-6 md:px-20 md:py-8 bg-orange-400 text-white rounded-full text-xl md:text-2xl font-bold hover:bg-orange-500 transition-colors shadow-lg"
                 >
                   ส่งแบบสำรวจ
                 </button>
@@ -153,6 +153,14 @@ export default function Home() {
 
         {currentStep === 'chat' && (
           <div className="space-y-8">
+            <div className="text-center mb-4">
+              <button
+                onClick={() => setCurrentStep('survey')}
+                className="text-gray-500 hover:text-gray-700 text-lg font-semibold"
+              >
+                ← กลับ
+              </button>
+            </div>
             <ChatBot
               surveyData={surveyData}
               onComplete={handleChatComplete}
@@ -161,15 +169,15 @@ export default function Home() {
         )}
 
         {currentStep === 'complete' && (
-          <div className="text-center space-y-8">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <div className="text-green-600 text-3xl">✓</div>
+          <div className="text-center space-y-12">
+            <div className="w-32 h-32 md:w-40 md:h-40 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+              <div className="text-green-600 text-6xl md:text-7xl font-bold">✓</div>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-light text-gray-900">
+            <div className="space-y-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
                 ขอบคุณ
               </h2>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-600 text-xl md:text-2xl font-semibold">
                 ได้รับข้อมูลเรียบร้อยแล้ว
               </p>
             </div>
@@ -177,11 +185,11 @@ export default function Home() {
         )}
 
         {currentStep !== 'complete' && (
-          <div className="text-center mt-12">
-            <div className="flex justify-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${currentStep === 'survey' ? 'bg-orange-400' : 'bg-gray-200'}`}></div>
-              <div className={`w-2 h-2 rounded-full ${currentStep === 'chat' ? 'bg-orange-400' : 'bg-gray-200'}`}></div>
-              <div className="w-2 h-2 rounded-full bg-gray-200"></div>
+          <div className="text-center mt-16">
+            <div className="flex justify-center space-x-4">
+              <div className={`w-4 h-4 md:w-5 md:h-5 rounded-full ${currentStep === 'survey' ? 'bg-orange-400' : 'bg-gray-300'}`}></div>
+              <div className={`w-4 h-4 md:w-5 md:h-5 rounded-full ${currentStep === 'chat' ? 'bg-orange-400' : 'bg-gray-300'}`}></div>
+              <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-gray-300"></div>
             </div>
           </div>
         )}
